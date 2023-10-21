@@ -1,0 +1,77 @@
+import java.util.Scanner;
+public class TicTacToe {
+    public static void main(String[] args) {
+        char[][] board = {
+                {' ', ' ', ' '},
+                {' ', ' ', ' '},
+                {' ', ' ', ' '}
+        };
+        boolean isPlayerX = true;
+
+        printBoard(board);
+
+        for (int move = 0; move < 9; move++) {
+            char playerSymbol = (isPlayerX) ? 'X' : 'O';
+            System.out.println("Player " + playerSymbol + ", enter your move (row and column): ");
+
+            int row, col;
+            Scanner scanner = new Scanner(System.in);
+            row = scanner.nextInt();
+            col = scanner.nextInt();
+
+            if (row < 0 || row > 2 || col < 0 || col > 2 || board[row][col] != ' ') {
+                System.out.println("Invalid move. Try again.");
+                move--;
+                continue;
+            }
+
+            board[row][col] = playerSymbol;
+            isPlayerX = !isPlayerX;
+            printBoard(board);
+
+            if (checkWin(board, playerSymbol)) {
+                System.out.println("Player " + playerSymbol + " wins!");
+                break;
+            }
+        }
+
+        if (!checkWin(board, 'X') && !checkWin(board, 'O')) {
+            System.out.println("It's a draw!");
+        }
+    }
+
+    public static void printBoard(char[][] board) {
+        System.out.println("  0 1 2");
+        for (int row = 0; row < 3; row++) {
+            System.out.print(row + " ");
+            for (int col = 0; col < 3; col++) {
+                System.out.print(board[row][col]);
+                if (col < 2) {
+                    System.out.print("|");
+                }
+            }
+            System.out.println();
+            if (row < 2) {
+                System.out.println("  -----");
+            }
+        }
+    }
+
+    public static boolean checkWin(char[][] board, char player) {
+        for (int i = 0; i < 3; i++) {
+            if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+                return true; // Check rows
+            }
+            if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+                return true; // Check columns
+            }
+        }
+        if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+            return true; // Check diagonal (top-left to bottom-right)
+        }
+        if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+            return true; // Check diagonal (top-right to bottom-left)
+        }
+        return false;
+    }
+}
